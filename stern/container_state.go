@@ -26,6 +26,7 @@ const (
 	RUNNING    = "running"
 	WAITING    = "waiting"
 	TERMINATED = "terminated"
+	ALL        = "all"
 )
 
 func NewContainerState(stateConfig string) (ContainerState, error) {
@@ -35,13 +36,16 @@ func NewContainerState(stateConfig string) (ContainerState, error) {
 		return WAITING, nil
 	} else if stateConfig == TERMINATED {
 		return TERMINATED, nil
+	} else if stateConfig == ALL {
+		return ALL, nil
 	}
 
-	return "", errors.New("containerState should be one of 'running', 'waiting', or 'terminated'")
+	return "", errors.New("containerState should be one of 'running', 'waiting', 'terminated' or 'all'")
 }
 
 func (stateConfig ContainerState) Match(containerState v1.ContainerState) bool {
 	return (stateConfig == RUNNING && containerState.Running != nil) ||
 		(stateConfig == WAITING && containerState.Waiting != nil) ||
-		(stateConfig == TERMINATED && containerState.Terminated != nil)
+		(stateConfig == TERMINATED && containerState.Terminated != nil) ||
+		(stateConfig == ALL)
 }
