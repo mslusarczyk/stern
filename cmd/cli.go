@@ -64,7 +64,7 @@ var opts = &Options{
 	tail:           -1,
 	color:          "auto",
 	template:       "",
-	output:         "default",
+	output:         "raw",
 }
 
 func Run() {
@@ -76,7 +76,7 @@ func Run() {
 	cmd.Flags().StringVarP(&opts.excludeContainer, "exclude-container", "E", opts.excludeContainer, "Exclude a Container name")
 	cmd.Flags().StringVar(&opts.containerState, "container-state", opts.containerState, "If present, tail containers with status in running, waiting, terminated or all. Default to running.")
 	cmd.Flags().BoolVarP(&opts.timestamps, "timestamps", "t", opts.timestamps, "Print timestamps")
-	cmd.Flags().DurationVarP(&opts.since, "since", "s", opts.since, "Return logs newer than a relative duration like 5s, 2m, or 3h. Defaults to 48h.")
+	cmd.Flags().DurationVarP(&opts.since, "since", "s", opts.since, "Return logs newer than a relative duration like 5s, 2m, or 3h. Defaults to 12h.")
 	cmd.Flags().StringVar(&opts.context, "context", opts.context, "Kubernetes context to use. Default to current context configured in kubeconfig.")
 	cmd.Flags().StringVarP(&opts.namespace, "namespace", "n", opts.namespace, "Kubernetes namespace to use. Default to namespace configured in Kubernetes context")
 	cmd.Flags().StringVar(&opts.kubeConfig, "kubeconfig", opts.kubeConfig, "Path to kubeconfig file to use")
@@ -265,7 +265,7 @@ func parseConfig(args []string) (*stern.Config, error) {
 	}
 
 	if opts.since == 0 {
-		opts.since = 172800000000000 // 48h
+		opts.since = 43200000000000 // 12h
 	}
 
 	return &stern.Config{
